@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Next Watch</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>Next Watch</h1>
+      <p class="tagline">Pick a few genres, rate movies only if you want to, and get ten suggestions. No account, and nothing is saved.</p>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <section class="panel inputs" aria-labelledby="step1">
+      <h2 id="step1"><span class="step">1</span> What are you in the mood for?</h2>
+      <p class="hint">Choose one or more genres.</p>
+      <div id="genres" class="chips" role="group" aria-label="Genres"></div>
+
+      <h2 id="step2"><span class="step">2</span> Rate movies you know <span class="optional">optional</span></h2>
+      <p class="hint" id="rating-hint">Each rating sharpens the list. Skip anything you haven't seen or don't remember; a skip never counts as a low rating.</p>
+      <div class="meter" aria-live="polite">
+        <div class="meter-bar"><div id="meter-fill"></div></div>
+        <span id="meter-text">0 rated</span>
+      </div>
+      <label class="search">
+        <span class="visually-hidden">Find a movie to rate</span>
+        <input id="search" type="search" placeholder="Find a movie to rate..." autocomplete="off">
+      </label>
+      <ul id="search-results" class="search-results" hidden></ul>
+      <ul id="to-rate" class="rate-list"></ul>
+      <button id="more" class="link-button" type="button">Show other movies to rate</button>
+    </section>
+
+    <section class="panel results" aria-labelledby="results-title">
+      <div class="results-head">
+        <h2 id="results-title">Your suggestions</h2>
+        <label class="toggle">
+          <input id="genre-filter" type="checkbox" checked>
+          <span>Only my genres</span>
+        </label>
+      </div>
+      <p id="mode" class="mode" aria-live="polite"></p>
+      <ol id="recs" class="recs" aria-live="polite"></ol>
+      <p id="empty" class="empty" hidden>Choose a genre or rate a movie to see suggestions.</p>
+    </section>
+  </main>
+
+  <button id="jump" class="jump" type="button">See your suggestions &darr;</button>
+
+  <footer class="wrap foot">
+    Ratings and genres stay in this browser tab and are cleared when you close it. Data: MovieLens (GroupLens). Links open TMDB or IMDb.
+  </footer>
+
+  <template id="rate-row">
+    <li class="rate-row">
+      <div class="movie"><span class="title"></span> <span class="meta"></span></div>
+      <div class="stars" role="radiogroup"></div>
+      <button class="skip" type="button">Haven't seen</button>
+    </li>
+  </template>
+
+  <template id="rec-card">
+    <li class="card">
+      <div class="card-main">
+        <h3><span class="title"></span> <span class="year"></span></h3>
+        <p class="aka"></p>
+        <p class="meta"></p>
+        <p class="reason"></p>
+      </div>
+      <div class="card-actions">
+        <a class="ext tmdb" target="_blank" rel="noopener">TMDB</a>
+        <a class="ext imdb" target="_blank" rel="noopener">IMDb</a>
+        <button class="seen" type="button">Seen it</button>
+      </div>
+    </li>
+  </template>
+
+  <script src="static/recommender.js"></script>
+  <script src="static/main.js"></script>
+</body>
+</html>
