@@ -17,18 +17,18 @@
   <main class="wrap layout">
     <section class="panel inputs" aria-labelledby="step1">
       <h2 id="step1"><span class="step">1</span> What are you in the mood for?</h2>
-      <p class="hint">Choose one or more genres.</p>
+      <p class="hint">Choose one or more genres. Suggestions appear right away.</p>
       <div id="genres" class="chips" role="group" aria-label="Genres"></div>
 
       <h2 id="step2"><span class="step">2</span> Rate movies you know <span class="optional">optional</span></h2>
-      <p class="hint" id="rating-hint">Each rating sharpens the list. Skip anything you haven't seen or don't remember; a skip never counts as a low rating.</p>
+      <p class="hint" id="rating-hint">Each rating sharpens the list: about 5 is a good start, and 15 turns on the full model. Skip anything you haven't seen or don't remember; a skip never counts as a low rating.</p>
       <div class="meter" aria-live="polite">
         <div class="meter-bar"><div id="meter-fill"></div></div>
         <span id="meter-text">0 rated</span>
       </div>
       <label class="search">
         <span class="visually-hidden">Find a movie to rate</span>
-        <input id="search" type="search" placeholder="Find a movie to rate..." autocomplete="off">
+        <input id="search" type="search" placeholder="Find a movie you've seen, then rate it..." autocomplete="off">
       </label>
       <ul id="search-results" class="search-results" hidden></ul>
       <ul id="to-rate" class="rate-list"></ul>
@@ -44,6 +44,7 @@
         </label>
       </div>
       <p id="mode" class="mode" aria-live="polite"></p>
+      <p class="mode-note">"Already watched" hides a movie for this visit. Nothing is saved.</p>
       <ol id="recs" class="recs" aria-live="polite"></ol>
       <p id="empty" class="empty" hidden>Choose a genre or rate a movie to see suggestions.</p>
     </section>
@@ -52,12 +53,12 @@
   <button id="jump" class="jump" type="button">See your suggestions &darr;</button>
 
   <footer class="wrap foot">
-    Ratings and genres stay in this browser tab and are cleared when you close it. Data: MovieLens (GroupLens). Links open TMDB or IMDb.
+    Ratings and genres stay in this browser tab and are cleared when you close it. Data: MovieLens (GroupLens), 9,741 movies released up to 2018 and rated by 610 users. "Details" opens The Movie Database (TMDB); "IMDb" opens IMDb.
   </footer>
 
   <template id="rate-row">
     <li class="rate-row">
-      <div class="movie"><span class="title"></span> <span class="meta"></span></div>
+      <div class="movie"><span class="title"></span> <span class="meta"></span><span class="added-hint" hidden>Added. Tap a star to rate it.</span></div>
       <div class="stars" role="radiogroup"></div>
       <button class="skip" type="button">Haven't seen</button>
     </li>
@@ -72,9 +73,9 @@
         <p class="reason"></p>
       </div>
       <div class="card-actions">
-        <a class="ext tmdb" target="_blank" rel="noopener">TMDB</a>
+        <a class="ext tmdb" target="_blank" rel="noopener">Details</a>
         <a class="ext imdb" target="_blank" rel="noopener">IMDb</a>
-        <button class="seen" type="button">Seen it</button>
+        <button class="seen" type="button">Already watched</button>
       </div>
     </li>
   </template>

@@ -69,6 +69,10 @@ function paintStars(row, value) {
     b.setAttribute('aria-checked', String(i + 1 === value));
   });
   row.classList.toggle('rated', value > 0);
+  if (value > 0) {
+    row.classList.remove('added');
+    row.querySelector('.added-hint').hidden = true;
+  }
 }
 
 function setRating(id, stars, row) {
@@ -127,6 +131,11 @@ $('#search').addEventListener('input', (e) => {
         const existing = list.querySelector(`[data-id="${m.movieId}"]`);
         const row = existing || rateRow(m);
         if (!existing) list.prepend(row);
+        // Choosing a search result only adds the row; say that it still needs a rating.
+        if (!state.ratings[m.movieId]) {
+          row.classList.add('added');
+          row.querySelector('.added-hint').hidden = false;
+        }
         row.querySelector('.star').focus();
         box.hidden = true;
         $('#search').value = '';
@@ -202,9 +211,11 @@ function recCard(m) {
   card.querySelector('.reason').textContent = m.reason;
   const tmdb = card.querySelector('.tmdb');
   if (m.tmdb_url) tmdb.href = m.tmdb_url; else tmdb.hidden = true;
+  tmdb.setAttribute('aria-label', `Details for ${m.title} on The Movie Database (TMDB)`);
   card.querySelector('.imdb').href = m.imdb_url;
+  card.querySelector('.imdb').setAttribute('aria-label', `${m.title} on IMDb`);
   const seen = card.querySelector('.seen');
-  seen.setAttribute('aria-label', `I've seen ${m.title}; show something else`);
+  seen.setAttribute('aria-label', `I've already watched ${m.title}; hide it from this list`);
   seen.addEventListener('click', () => {
     state.seen.add(m.movieId);
     refreshRecommendations();
@@ -214,18 +225,30 @@ function recCard(m) {
 
 $('#genre-filter').addEventListener('change', refreshRecommendations);
 
-// On narrow screens the suggestions sit below the rating list; offer a jump while they are out of view.
+// On narrow screens the genres, the rating list, and the suggestions are far apart; a floating
+// button jumps down to the suggestions, and back up to the genres once the suggestions are in view.
 const jump = $('#jump');
 let resultsVisible = false;
+let genresVisible = true;
 function updateJump() {
-  jump.classList.toggle('show', !resultsVisible && $('#recs').children.length > 0);
-  jump.textContent = `See your ${$('#recs').children.length} suggestions \u2193`;
+  const n = $('#recs').children.length;
+  const toResults = n > 0 && !resultsVisible;
+  jump.classList.toggle('show', toResults || (n > 0 && !genresVisible));
+  jump.dataset.target = toResults ? 'results' : 'genres';
+  jump.textContent = toResults ? `See your ${n} suggestions \u2193` : '\u2191 Change genres';
 }
 new IntersectionObserver(([entry]) => { resultsVisible = entry.isIntersecting; updateJump(); })
   .observe($('.results'));
+new IntersectionObserver(([entry]) => { genresVisible = entry.isIntersecting; updateJump(); })
+  .observe($('#genres'));
 jump.addEventListener('click', () => {
-  $('.results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  $('#results-title').focus({ preventScroll: true });
+  if (jump.dataset.target === 'results') {
+    $('.results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $('#results-title').focus({ preventScroll: true });
+  } else {
+    $('#step1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $('#genres .chip').focus({ preventScroll: true });
+  }
 });
 $('#results-title').tabIndex = -1;
 

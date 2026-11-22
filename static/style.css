@@ -91,6 +91,9 @@ button, input { font: inherit; color: inherit; }
 .rate-row .title { font-weight: 600; }
 .rate-row .meta { color: var(--ink-3); font-size: 13px; }
 .rate-row.rated .title::after { content: " \2713"; color: var(--accent); }
+.rate-row.added { background: var(--accent-soft); border-radius: 8px; padding-left: 8px; padding-right: 8px; }
+.added-hint { display: block; font-size: 13px; font-weight: 600; color: var(--accent); }
+.added-hint[hidden] { display: none; }
 .stars { display: flex; }
 .star {
   background: none; border: 0; padding: 2px; cursor: pointer; font-size: 22px; line-height: 1;
@@ -109,6 +112,7 @@ button, input { font: inherit; color: inherit; }
 .toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-2); cursor: pointer; }
 .mode { margin: 6px 0 14px; font-size: 13px; color: var(--ink-2); }
 .mode strong { color: var(--ink); }
+.mode-note { margin: -8px 0 14px; font-size: 12px; color: var(--ink-3); }
 
 .recs { list-style: none; padding: 0; margin: 0; counter-reset: rec; }
 .card {
